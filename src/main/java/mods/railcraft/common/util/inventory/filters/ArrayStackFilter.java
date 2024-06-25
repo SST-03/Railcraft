@@ -17,8 +17,14 @@ import mods.railcraft.common.util.inventory.InvTools;
 public class ArrayStackFilter implements IStackFilter {
 
     private final ItemStack[] stacks;
+    private final boolean matchNBT;
 
     public ArrayStackFilter(ItemStack... stacks) {
+        this(false, stacks);
+    }
+
+    public ArrayStackFilter(boolean matchNBT, ItemStack... stacks) {
+        this.matchNBT = matchNBT;
         this.stacks = stacks;
     }
 
@@ -27,7 +33,14 @@ public class ArrayStackFilter implements IStackFilter {
         if (stacks.length == 0 || !hasFilter()) {
             return true;
         }
-        return InvTools.isItemEqual(stack, stacks);
+
+        for (ItemStack filterStack : stacks) {
+            if (InvTools.isItemEqual(stack, filterStack, false, matchNBT)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public ItemStack[] getStacks() {

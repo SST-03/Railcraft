@@ -24,11 +24,7 @@ import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.gui.slots.SlotOutput;
-import mods.railcraft.common.util.inventory.AdjacentInventoryCache;
-import mods.railcraft.common.util.inventory.InvTools;
-import mods.railcraft.common.util.inventory.InventorySorter;
-import mods.railcraft.common.util.inventory.ItemStackMap;
-import mods.railcraft.common.util.inventory.ItemStackSet;
+import mods.railcraft.common.util.inventory.*;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.ITileFilter;
@@ -136,8 +132,11 @@ public class TileItemUnloader extends TileLoaderItemBase {
                     if (numMoved == null) {
                         numMoved = 0;
                     }
-                    if (numMoved < InvTools.countItems(getItemFilters(), filter)) {
-                        ItemStack moved = InvTools.moveOneItem(cartInv, chests, filter);
+
+                    InvFilteredHelper helper = InvFilteredHelper.filteredByStacks(isMatchByNBT(), filter);
+
+                    if (numMoved < helper.countItems(getItemFilters())) {
+                        ItemStack moved = helper.moveOneItem(cartInv, chests);
                         if (moved != null) {
                             movedItemCart = true;
                             numMoved++;
@@ -163,9 +162,11 @@ public class TileItemUnloader extends TileLoaderItemBase {
                     if (!checkedItems.add(filter)) {
                         continue;
                     }
-                    int stocked = InvTools.countItems(chests, filter);
-                    if (stocked < InvTools.countItems(getItemFilters(), filter)) {
-                        ItemStack moved = InvTools.moveOneItem(cartInv, chests, filter);
+
+                    InvFilteredHelper helper = InvFilteredHelper.filteredByStacks(isMatchByNBT(), filter);
+                    int stocked = helper.countItems(chests);
+                    if (stocked < helper.countItems(getItemFilters())) {
+                        ItemStack moved = helper.moveOneItem(cartInv, chests);
                         if (moved != null) {
                             movedItemCart = true;
                             break;
@@ -182,9 +183,10 @@ public class TileItemUnloader extends TileLoaderItemBase {
                     if (!checkedItems.add(filter)) {
                         continue;
                     }
-                    int stocked = InvTools.countItems(cartInv, filter);
-                    if (stocked > InvTools.countItems(getItemFilters(), filter)) {
-                        ItemStack moved = InvTools.moveOneItem(cartInv, chests, filter);
+                    InvFilteredHelper helper = InvFilteredHelper.filteredByStacks(isMatchByNBT(), filter);
+                    int stocked = helper.countItems(cartInv);
+                    if (stocked > helper.countItems(getItemFilters())) {
+                        ItemStack moved = helper.moveOneItem(cartInv, chests);
                         if (moved != null) {
                             movedItemCart = true;
                             break;
@@ -192,7 +194,8 @@ public class TileItemUnloader extends TileLoaderItemBase {
                     }
                 }
                 if (!movedItemCart) {
-                    movedItemCart = InvTools.moveOneItemExcept(cartInv, chests, getItemFilters().getContents()) != null;
+                    movedItemCart = InvFilteredHelper.filteredByStacks(getItemFilters().getContents()).invert()
+                            .moveOneItem(cartInv, chests) != null;
                 }
                 break;
             }
@@ -206,7 +209,9 @@ public class TileItemUnloader extends TileLoaderItemBase {
                         continue;
                     }
                     hasFilter = true;
-                    ItemStack moved = InvTools.moveOneItem(cartInv, chests, filter);
+
+                    ItemStack moved = InvFilteredHelper.filteredByStacks(isMatchByNBT(), filter)
+                            .moveOneItem(cartInv, chests);
                     if (moved != null) {
                         movedItemCart = true;
                         break;
@@ -268,7 +273,8 @@ public class TileItemUnloader extends TileLoaderItemBase {
             }
             hasFilter = true;
             Short numMoved = transferedItems.get(filter);
-            if (numMoved == null || numMoved < InvTools.countItems(getItemFilters(), filter)) {
+            if (numMoved == null || numMoved
+                    < InvFilteredHelper.filteredByStacks(isMatchByNBT(), filter).countItems(getItemFilters())) {
                 return false;
             }
         }
@@ -284,8 +290,11 @@ public class TileItemUnloader extends TileLoaderItemBase {
             if (!checkedItems.add(filter)) {
                 continue;
             }
-            int stocked = InvTools.countItems(chests, filter);
-            if (stocked < InvTools.countItems(getItemFilters(), filter)) {
+
+            InvFilteredHelper helper = InvFilteredHelper.filteredByStacks(isMatchByNBT(), filter);
+
+            int stocked = helper.countItems(chests);
+            if (stocked < helper.countItems(getItemFilters())) {
                 return false;
             }
         }
@@ -302,9 +311,12 @@ public class TileItemUnloader extends TileLoaderItemBase {
             if (!checkedItems.add(filter)) {
                 continue;
             }
-            int stocked = InvTools.countItems(cartInv, filter);
+
+            InvFilteredHelper helper = InvFilteredHelper.filteredByStacks(isMatchByNBT(), filter);
+
+            int stocked = helper.countItems(cartInv);
             max += filter.stackSize;
-            if (stocked > InvTools.countItems(getItemFilters(), filter)) {
+            if (stocked > helper.countItems(getItemFilters())) {
                 return false;
             }
         }
@@ -325,7 +337,7 @@ public class TileItemUnloader extends TileLoaderItemBase {
                 continue;
             }
             hasFilter = true;
-            if (InvTools.countItems(chests, filter) > 0) {
+            if (InvFilteredHelper.filteredByStacks(isMatchByNBT(), filter).countItems(chests) > 0) {
                 return false;
             }
         }
