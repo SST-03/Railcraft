@@ -133,7 +133,7 @@ public class TileItemUnloader extends TileLoaderItemBase {
                         numMoved = 0;
                     }
 
-                    InvFilteredHelper helper = InvFilteredHelper.filteredByStacks(isMatchByNBT(), filter);
+                    InvFilteredHelper helper = InvFilteredHelper.filteredByStacks(isMatchByNBT(), isMatchByMetadata(), filter);
 
                     if (numMoved < helper.countItems(getItemFilters())) {
                         ItemStack moved = helper.moveOneItem(cartInv, chests);
@@ -163,7 +163,7 @@ public class TileItemUnloader extends TileLoaderItemBase {
                         continue;
                     }
 
-                    InvFilteredHelper helper = InvFilteredHelper.filteredByStacks(isMatchByNBT(), filter);
+                    InvFilteredHelper helper = InvFilteredHelper.filteredByStacks(isMatchByNBT(), isMatchByMetadata(), filter);
                     int stocked = helper.countItems(chests);
                     if (stocked < helper.countItems(getItemFilters())) {
                         ItemStack moved = helper.moveOneItem(cartInv, chests);
@@ -183,7 +183,7 @@ public class TileItemUnloader extends TileLoaderItemBase {
                     if (!checkedItems.add(filter)) {
                         continue;
                     }
-                    InvFilteredHelper helper = InvFilteredHelper.filteredByStacks(isMatchByNBT(), filter);
+                    InvFilteredHelper helper = InvFilteredHelper.filteredByStacks(isMatchByNBT(), isMatchByMetadata(), filter);
                     int stocked = helper.countItems(cartInv);
                     if (stocked > helper.countItems(getItemFilters())) {
                         ItemStack moved = helper.moveOneItem(cartInv, chests);
@@ -210,7 +210,7 @@ public class TileItemUnloader extends TileLoaderItemBase {
                     }
                     hasFilter = true;
 
-                    ItemStack moved = InvFilteredHelper.filteredByStacks(isMatchByNBT(), filter)
+                    ItemStack moved = InvFilteredHelper.filteredByStacks(isMatchByNBT(), isMatchByMetadata(), filter)
                             .moveOneItem(cartInv, chests);
                     if (moved != null) {
                         movedItemCart = true;
@@ -274,7 +274,7 @@ public class TileItemUnloader extends TileLoaderItemBase {
             hasFilter = true;
             Short numMoved = transferedItems.get(filter);
             if (numMoved == null || numMoved
-                    < InvFilteredHelper.filteredByStacks(isMatchByNBT(), filter).countItems(getItemFilters())) {
+                    < InvFilteredHelper.filteredByStacks(isMatchByNBT(), isMatchByMetadata(), filter).countItems(getItemFilters())) {
                 return false;
             }
         }
@@ -291,7 +291,7 @@ public class TileItemUnloader extends TileLoaderItemBase {
                 continue;
             }
 
-            InvFilteredHelper helper = InvFilteredHelper.filteredByStacks(isMatchByNBT(), filter);
+            InvFilteredHelper helper = InvFilteredHelper.filteredByStacks(isMatchByNBT(), isMatchByMetadata(), filter);
 
             int stocked = helper.countItems(chests);
             if (stocked < helper.countItems(getItemFilters())) {
@@ -312,7 +312,7 @@ public class TileItemUnloader extends TileLoaderItemBase {
                 continue;
             }
 
-            InvFilteredHelper helper = InvFilteredHelper.filteredByStacks(isMatchByNBT(), filter);
+            InvFilteredHelper helper = InvFilteredHelper.filteredByStacks(isMatchByNBT(), isMatchByMetadata(), filter);
 
             int stocked = helper.countItems(cartInv);
             max += filter.stackSize;
@@ -337,7 +337,7 @@ public class TileItemUnloader extends TileLoaderItemBase {
                 continue;
             }
             hasFilter = true;
-            if (InvFilteredHelper.filteredByStacks(isMatchByNBT(), filter).countItems(chests) > 0) {
+            if (InvFilteredHelper.filteredByStacks(isMatchByNBT(), isMatchByMetadata(), filter).countItems(chests) > 0) {
                 return false;
             }
         }

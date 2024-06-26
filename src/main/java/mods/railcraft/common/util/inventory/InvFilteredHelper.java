@@ -60,10 +60,10 @@ public class InvFilteredHelper {
     }
 
     public static InvFilteredHelper filteredByStacks(ItemStack... filters) {
-        return filteredByStacks(false, filters);
+        return filteredByStacks(false, false, filters);
     }
 
-    public static InvFilteredHelper filteredByStacks(boolean matchNBT, ItemStack... filters) {
-        return new InvFilteredHelper(new ArrayStackFilter(matchNBT, filters));
+    public static InvFilteredHelper filteredByStacks(boolean matchNBT, boolean matchMetadata, ItemStack... filters) {
+        return new InvFilteredHelper(new ArrayStackFilter(matchNBT, matchMetadata, filters));
     }
 }

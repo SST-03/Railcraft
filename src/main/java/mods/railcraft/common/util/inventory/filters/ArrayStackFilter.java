@@ -18,13 +18,15 @@ public class ArrayStackFilter implements IStackFilter {
 
     private final ItemStack[] stacks;
     private final boolean matchNBT;
+    private final boolean matchMetadata;
 
     public ArrayStackFilter(ItemStack... stacks) {
-        this(false, stacks);
+        this(false, false, stacks);
     }
 
-    public ArrayStackFilter(boolean matchNBT, ItemStack... stacks) {
+    public ArrayStackFilter(boolean matchNBT, boolean matchMetadata, ItemStack... stacks) {
         this.matchNBT = matchNBT;
+        this.matchMetadata = matchMetadata;
         this.stacks = stacks;
     }
 
@@ -35,7 +37,7 @@ public class ArrayStackFilter implements IStackFilter {
         }
 
         for (ItemStack filterStack : stacks) {
-            if (InvTools.isItemEqual(stack, filterStack, false, matchNBT)) {
+            if (InvTools.isItemEqual(stack, filterStack, false, matchNBT, matchMetadata)) {
                 return true;
             }
         }

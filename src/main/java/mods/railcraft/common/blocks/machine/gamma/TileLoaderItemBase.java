@@ -41,6 +41,9 @@ public abstract class TileLoaderItemBase extends TileLoaderBase implements IGuiR
     private final MultiButtonController<MatchNBTMode> matchNbtController = new MultiButtonController<>(
             0,
             MatchNBTMode.values());
+    private final MultiButtonController<MatchMetadataMode> matchMetadataController = new MultiButtonController<>(
+        0,
+        MatchMetadataMode.values());
     protected boolean movedItemCart = false;
 
     public MultiButtonController<EnumTransferMode> getTransferModeController() {
@@ -57,6 +60,10 @@ public abstract class TileLoaderItemBase extends TileLoaderBase implements IGuiR
 
     public MultiButtonController<MatchNBTMode> getMatchNbtController() {
         return matchNbtController;
+    }
+
+    public MultiButtonController<MatchMetadataMode> getMatchMetadataController() {
+        return matchMetadataController;
     }
 
     public final PhantomInventory getItemFilters() {
@@ -120,12 +127,21 @@ public abstract class TileLoaderItemBase extends TileLoaderBase implements IGuiR
         this.matchNbtController.setCurrentState(matchByNBT ? MatchNBTMode.MATCH_NBT : MatchNBTMode.IGNORE_NBT);
     }
 
+    public boolean isMatchByMetadata() {
+        return matchMetadataController.getButtonState() == MatchMetadataMode.MATCH_METADATA;
+    }
+
+    public void setMatchByMetadata(boolean matchByMetadata) {
+        this.matchMetadataController.setCurrentState(matchByMetadata ? MatchMetadataMode.MATCH_METADATA : MatchMetadataMode.IGNORE_METADATA);
+    }
+
     @Override
     public void writePacketData(DataOutputStream data) throws IOException {
         super.writePacketData(data);
         data.writeByte(transferModeController.getCurrentState());
         data.writeByte(redstoneModeController.getCurrentState());
         data.writeBoolean(isMatchByNBT());
+        data.writeBoolean(isMatchByMetadata());
     }
 
     @Override
@@ -134,6 +150,7 @@ public abstract class TileLoaderItemBase extends TileLoaderBase implements IGuiR
         transferModeController.setCurrentState(data.readByte());
         redstoneModeController.setCurrentState(data.readByte());
         setMatchByNBT(data.readBoolean());
+        setMatchByMetadata(data.readBoolean());
     }
 
     @Override
@@ -141,6 +158,7 @@ public abstract class TileLoaderItemBase extends TileLoaderBase implements IGuiR
         data.writeByte(transferModeController.getCurrentState());
         data.writeByte(redstoneModeController.getCurrentState());
         data.writeBoolean(isMatchByNBT());
+        data.writeBoolean(isMatchByMetadata());
     }
 
     @Override
@@ -148,6 +166,7 @@ public abstract class TileLoaderItemBase extends TileLoaderBase implements IGuiR
         transferModeController.setCurrentState(data.readByte());
         redstoneModeController.setCurrentState(data.readByte());
         setMatchByNBT(data.readBoolean());
+        setMatchByMetadata(data.readBoolean());
     }
 
     @Override
@@ -157,6 +176,7 @@ public abstract class TileLoaderItemBase extends TileLoaderBase implements IGuiR
         redstoneModeController.writeToNBT(data, "redstone");
         getItemFilters().writeToNBT("invFilters", data);
         data.setBoolean("matchByNBT", isMatchByNBT());
+        data.setBoolean("matchByMetadata", isMatchByMetadata());
     }
 
     @Override
@@ -176,6 +196,7 @@ public abstract class TileLoaderItemBase extends TileLoaderBase implements IGuiR
         }
 
         setMatchByNBT(data.getBoolean("matchByNBT"));
+        setMatchByMetadata(data.getBoolean("matchByMetadata"));
     }
 
     public enum EnumTransferMode implements IMultiButtonState {
@@ -188,7 +209,7 @@ public abstract class TileLoaderItemBase extends TileLoaderBase implements IGuiR
         private final String label;
         private final ToolTip tip;
 
-        private EnumTransferMode(String label) {
+        EnumTransferMode(String label) {
             this.label = label;
             this.tip = ToolTip.buildToolTip(label + ".tip");
         }
@@ -219,7 +240,7 @@ public abstract class TileLoaderItemBase extends TileLoaderBase implements IGuiR
         private final String label;
         private final ToolTip tip;
 
-        private EnumRedstoneMode(String label) {
+        EnumRedstoneMode(String label) {
             this.label = label;
             this.tip = ToolTip.buildToolTip(label + ".tip");
         }
@@ -240,17 +261,17 @@ public abstract class TileLoaderItemBase extends TileLoaderBase implements IGuiR
         }
     }
 
-    public enum MatchNBTMode implements IMultiButtonState {
+    public enum MatchNBTMode implements IOverlayMultiButtonState {
 
-        IGNORE_NBT("railcraft.gui.item.loader.ignore_nbt"),
-        MATCH_NBT("railcraft.gui.item.loader.match_nbt");
-
-        public static final IButtonTextureSet MINI_BUTTON = new ButtonTextureSet(0, 0, 16, 16);
+        IGNORE_NBT("railcraft.gui.item.loader.ignore_nbt", new ButtonTextureSet(64, 0, 32, 32)),
+        MATCH_NBT("railcraft.gui.item.loader.match_nbt", new ButtonTextureSet(32, 0, 32, 32));
 
         private final ToolTip tip;
+        private final IButtonTextureSet overlay;
 
-        MatchNBTMode(String label) {
+        MatchNBTMode(String label, IButtonTextureSet overlay) {
             this.tip = ToolTip.buildToolTip(label + ".tip");
+            this.overlay = overlay;
         }
 
         @Override
@@ -259,8 +280,37 @@ public abstract class TileLoaderItemBase extends TileLoaderBase implements IGuiR
         }
 
         @Override
-        public IButtonTextureSet getTextureSet() {
-            return MINI_BUTTON;
+        public IButtonTextureSet getOverlayTexture() {
+            return overlay;
+        }
+
+        @Override
+        public ToolTip getToolTip() {
+            return tip;
+        }
+    }
+
+    public enum MatchMetadataMode implements IOverlayMultiButtonState {
+
+        IGNORE_METADATA("railcraft.gui.item.loader.ignore_metadata", new ButtonTextureSet(64, 32, 32, 32)),
+        MATCH_METADATA("railcraft.gui.item.loader.match_metadata", new ButtonTextureSet(32, 32, 32, 32));
+
+        private final ToolTip tip;
+        private final IButtonTextureSet overlay;
+
+        MatchMetadataMode(String label, IButtonTextureSet overlay) {
+            this.tip = ToolTip.buildToolTip(label + ".tip");
+            this.overlay = overlay;
+        }
+
+        @Override
+        public String getLabel() {
+            return "";
+        }
+
+        @Override
+        public IButtonTextureSet getOverlayTexture() {
+            return overlay;
         }
 
         @Override

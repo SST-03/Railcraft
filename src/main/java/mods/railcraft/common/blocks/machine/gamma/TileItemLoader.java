@@ -121,7 +121,7 @@ public class TileItemLoader extends TileLoaderItemBase {
                         numMoved = 0;
                     }
 
-                    InvFilteredHelper helper = InvFilteredHelper.filteredByStacks(isMatchByNBT(), filter);
+                    InvFilteredHelper helper = InvFilteredHelper.filteredByStacks(isMatchByNBT(), isMatchByMetadata(), filter);
 
                     if (numMoved < helper.countItems(getItemFilters())) {
                         ItemStack moved = helper.moveOneItem(chests, cartInv);
@@ -151,7 +151,7 @@ public class TileItemLoader extends TileLoaderItemBase {
                         continue;
                     }
 
-                    InvFilteredHelper helper = InvFilteredHelper.filteredByStacks(isMatchByNBT(), filter);
+                    InvFilteredHelper helper = InvFilteredHelper.filteredByStacks(isMatchByNBT(), isMatchByMetadata(), filter);
 
                     int stocked = helper.countItems(cartInv);
                     if (stocked < helper.countItems(getItemFilters())) {
@@ -173,7 +173,7 @@ public class TileItemLoader extends TileLoaderItemBase {
                         continue;
                     }
 
-                    InvFilteredHelper helper = InvFilteredHelper.filteredByStacks(isMatchByNBT(), filter);
+                    InvFilteredHelper helper = InvFilteredHelper.filteredByStacks(isMatchByNBT(), isMatchByMetadata(), filter);
 
                     int stocked = helper.countItems(chests);
                     if (stocked > helper.countItems(getItemFilters())) {
@@ -185,7 +185,7 @@ public class TileItemLoader extends TileLoaderItemBase {
                     }
                 }
                 if (!movedItemCart) {
-                    movedItemCart = InvFilteredHelper.filteredByStacks(isMatchByNBT(), getItemFilters().getContents())
+                    movedItemCart = InvFilteredHelper.filteredByStacks(isMatchByNBT(), isMatchByMetadata(), getItemFilters().getContents())
                             .invert().moveOneItem(chests, cartInv) != null;
                 }
                 break;
@@ -201,7 +201,7 @@ public class TileItemLoader extends TileLoaderItemBase {
                     }
                     hasFilter = true;
 
-                    ItemStack moved = InvFilteredHelper.filteredByStacks(isMatchByNBT(), filter)
+                    ItemStack moved = InvFilteredHelper.filteredByStacks(isMatchByNBT(), isMatchByMetadata(), filter)
                             .moveOneItem(chests, cartInv);
                     if (moved != null) {
                         movedItemCart = true;
@@ -270,7 +270,7 @@ public class TileItemLoader extends TileLoaderItemBase {
             Short numMoved = transferredItems.get(filter);
 
             if (numMoved == null || numMoved
-                    < InvFilteredHelper.filteredByStacks(isMatchByNBT(), filter).countItems(getItemFilters())) {
+                    < InvFilteredHelper.filteredByStacks(isMatchByNBT(), isMatchByMetadata(), filter).countItems(getItemFilters())) {
                 return false;
             }
         }
@@ -287,7 +287,7 @@ public class TileItemLoader extends TileLoaderItemBase {
                 continue;
             }
 
-            InvFilteredHelper helper = InvFilteredHelper.filteredByStacks(isMatchByNBT(), filter);
+            InvFilteredHelper helper = InvFilteredHelper.filteredByStacks(isMatchByNBT(), isMatchByMetadata(), filter);
 
             int stocked = helper.countItems(cart);
             if (stocked < helper.countItems(getItemFilters())) {
@@ -308,7 +308,7 @@ public class TileItemLoader extends TileLoaderItemBase {
                 continue;
             }
 
-            InvFilteredHelper helper = InvFilteredHelper.filteredByStacks(isMatchByNBT(), filter);
+            InvFilteredHelper helper = InvFilteredHelper.filteredByStacks(isMatchByNBT(), isMatchByMetadata(), filter);
 
             int stocked = helper.countItems(chests);
             max += filter.stackSize;
@@ -331,7 +331,7 @@ public class TileItemLoader extends TileLoaderItemBase {
             }
             hasFilter = true;
 
-            if (InvFilteredHelper.filteredByStacks(isMatchByNBT(), filter).countItems(cart) > 0) {
+            if (InvFilteredHelper.filteredByStacks(isMatchByNBT(), isMatchByMetadata(), filter).countItems(cart) > 0) {
                 return false;
             }
         }

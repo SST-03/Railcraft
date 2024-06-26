@@ -541,7 +541,7 @@ public abstract class InvTools {
      * @return True if equal
      */
     public static boolean isItemEqual(ItemStack a, ItemStack b) {
-        return isItemEqual(a, b, true, true);
+        return isItemEqual(a, b, true, true, false);
     }
 
     /**
@@ -552,23 +552,23 @@ public abstract class InvTools {
      * @return True if equal
      */
     public static boolean isItemEqualIgnoreNBT(ItemStack a, ItemStack b) {
-        return isItemEqual(a, b, true, false);
+        return isItemEqual(a, b, true, false, false);
     }
 
-    public static boolean isItemEqual(final ItemStack a, final ItemStack b, final boolean matchDamage,
-            final boolean matchNBT) {
+    public static boolean isItemEqual(final ItemStack a, final ItemStack b, boolean matchSubtypes,
+            final boolean matchNBT, boolean matchDamage) {
         if (a == null || b == null) return false;
         if (a.getItem() != b.getItem()) return false;
         if (matchNBT && !ItemStack.areItemStackTagsEqual(a, b)) return false;
-        if (matchDamage && a.getHasSubtypes()) {
+        if (matchDamage || (matchSubtypes && a.getHasSubtypes())) {
             if (isWildcard(a) || isWildcard(b)) return true;
-            if (a.getItemDamage() != b.getItemDamage()) return false;
+            return a.getItemDamage() == b.getItemDamage();
         }
         return true;
     }
 
-    public static boolean isCartItemEqual(final ItemStack a, final ItemStack b, final boolean matchDamage) {
-        if (!isItemEqual(a, b, matchDamage, false)) return false;
+    public static boolean isCartItemEqual(final ItemStack a, final ItemStack b, final boolean matchSubtypes) {
+        if (!isItemEqual(a, b, matchSubtypes, false, false)) return false;
         if (a.hasDisplayName() && !a.getDisplayName().equals(b.getDisplayName())) return false;
         return true;
     }
