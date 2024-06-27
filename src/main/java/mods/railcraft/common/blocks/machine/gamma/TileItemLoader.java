@@ -24,6 +24,7 @@ import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.util.inventory.AdjacentInventoryCache;
+import mods.railcraft.common.util.inventory.InvFilteredHelper;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.InventorySorter;
 import mods.railcraft.common.util.inventory.ItemStackMap;
