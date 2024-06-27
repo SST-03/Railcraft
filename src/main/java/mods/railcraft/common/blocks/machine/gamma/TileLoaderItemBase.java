@@ -18,7 +18,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
 import mods.railcraft.common.carts.CartUtils;
-import mods.railcraft.common.gui.buttons.*;
+import mods.railcraft.common.gui.buttons.IButtonTextureSet;
+import mods.railcraft.common.gui.buttons.IMultiButtonState;
+import mods.railcraft.common.gui.buttons.MultiButtonController;
+import mods.railcraft.common.gui.buttons.StandardButtonTextureSets;
 import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
