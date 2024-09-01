@@ -13,6 +13,7 @@ import net.minecraft.item.ItemStack;
 
 import org.apache.logging.log4j.Level;
 
+import cpw.mods.fml.common.Loader;
 import ic2.api.recipe.Recipes;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.detector.BlockDetector;
@@ -138,6 +139,10 @@ public class ModuleIC2 extends RailcraftModule {
                 CraftingPlugin.addShapedRecipe(stack, "E", "M", 'E', mfe, 'M', Items.minecart);
                 CraftingPlugin.addShapelessRecipe(new ItemStack(Items.minecart), stack);
             }
+        }
+
+        if (Loader.isModLoaded("dreamcraft")) {
+            return;
         }
 
         ItemStack battery = IC2Plugin.getItem("reBattery");

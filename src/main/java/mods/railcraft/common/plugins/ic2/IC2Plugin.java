@@ -42,7 +42,8 @@ public class IC2Plugin {
     public static final int[] POWER_TIERS = { 1, 6, 32, 512, 2048, 8192 };
     private static final Map<String, ItemStack> itemCache = new HashMap<String, ItemStack>();
     private static final Map<String, Boolean> itemCacheFlag = new HashMap<String, Boolean>();
-    private static Boolean modLoaded = null;
+    private static Boolean IC2modLoaded = null;
+    private static Boolean dreamcraftLoaded = null;
     private static Boolean classic = null;
 
     public static ItemStack getItem(String tag) {
@@ -150,6 +151,9 @@ public class IC2Plugin {
 
     @Optional.Method(modid = "IC2")
     public static void addMaceratorRecipe(ItemStack input, ItemStack output) {
+        if (isDreamCraftInstalled()) {
+            return;
+        }
         try {
             Recipes.macerator.addRecipe(new RecipeInputItemStack(input), null, output);
         } catch (Throwable error) {
@@ -159,6 +163,9 @@ public class IC2Plugin {
 
     @Optional.Method(modid = "IC2")
     public static void removeMaceratorRecipes(ItemStack... items) {
+        if (isDreamCraftInstalled()) {
+            return;
+        }
         try {
             Map<IRecipeInput, RecipeOutput> recipes = Recipes.macerator.getRecipes();
 
@@ -190,6 +197,9 @@ public class IC2Plugin {
 
     @Optional.Method(modid = "IC2")
     public static void removeMaceratorDustRecipes(ItemStack... items) {
+        if (isDreamCraftInstalled()) {
+            return;
+        }
         try {
             Map<IRecipeInput, RecipeOutput> recipes = Recipes.macerator.getRecipes();
 
@@ -220,8 +230,17 @@ public class IC2Plugin {
     }
 
     public static boolean isModInstalled() {
-        if (modLoaded == null) modLoaded = Loader.isModLoaded("IC2") || Loader.isModLoaded("IC2-Classic-Spmod");
-        return modLoaded;
+        if (IC2modLoaded == null) {
+            IC2modLoaded = Loader.isModLoaded("IC2") || Loader.isModLoaded("IC2-Classic-Spmod");
+        }
+        return IC2modLoaded;
+    }
+
+    public static boolean isDreamCraftInstalled() {
+        if (dreamcraftLoaded == null) {
+            dreamcraftLoaded = Loader.isModLoaded("dreamcraft");
+        }
+        return dreamcraftLoaded;
     }
 
     public static boolean isClassic() {
