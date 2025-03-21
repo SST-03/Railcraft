@@ -103,8 +103,8 @@ public class ClientEffectProxy extends CommonEffectProxy {
     public boolean isGoggleAuraActive(GoggleAura aura) {
         ItemStack helm = Minecraft.getMinecraft().thePlayer.getCurrentArmor(MiscTools.ArmorSlots.HELM.ordinal());
         if (helm != null && helm.getItem() instanceof IToolGoggles) {
-            return ((IToolGoggles)helm.getItem()).getCurrentAura(helm) == aura;
-        };
+            return ((IToolGoggles) helm.getItem()).getCurrentAura(helm) == aura;
+        } ;
         return AuraKeyHandler.isAuraEnabled(aura);
     }
 
