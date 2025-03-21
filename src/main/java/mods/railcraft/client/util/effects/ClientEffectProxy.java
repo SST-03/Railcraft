@@ -18,6 +18,7 @@ import net.minecraft.world.World;
 
 import cpw.mods.fml.client.FMLClientHandler;
 import mods.railcraft.api.core.WorldCoordinate;
+import mods.railcraft.api.core.items.IToolGoggles;
 import mods.railcraft.api.signals.SignalTools;
 import mods.railcraft.client.core.AuraKeyHandler;
 import mods.railcraft.client.particles.EntityChimneyFX;
@@ -28,7 +29,6 @@ import mods.railcraft.client.particles.EntityHeatTrailFX;
 import mods.railcraft.client.particles.EntitySteamFX;
 import mods.railcraft.client.particles.EntityTuningFX;
 import mods.railcraft.client.render.RenderTESRSignals;
-import mods.railcraft.common.items.ItemGoggles;
 import mods.railcraft.common.items.ItemGoggles.GoggleAura;
 import mods.railcraft.common.util.effects.CommonEffectProxy;
 import mods.railcraft.common.util.effects.EffectManager;
@@ -101,10 +101,10 @@ public class ClientEffectProxy extends CommonEffectProxy {
 
     @Override
     public boolean isGoggleAuraActive(GoggleAura aura) {
-        if (ItemGoggles.areEnabled()) {
-            ItemStack goggles = ItemGoggles.getGoggles(Minecraft.getMinecraft().thePlayer);
-            return ItemGoggles.getCurrentAura(goggles) == aura;
-        }
+        ItemStack helm = Minecraft.getMinecraft().thePlayer.getCurrentArmor(MiscTools.ArmorSlots.HELM.ordinal());
+        if (helm != null && helm.getItem() instanceof IToolGoggles) {
+            return ((IToolGoggles)helm.getItem()).getCurrentAura(helm) == aura;
+        };
         return AuraKeyHandler.isAuraEnabled(aura);
     }
 

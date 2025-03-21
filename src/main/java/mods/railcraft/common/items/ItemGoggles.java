@@ -17,6 +17,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
 import cpw.mods.fml.common.FMLCommonHandler;
+import mods.railcraft.api.core.items.IToolGoggles;
 import mods.railcraft.common.blocks.hidden.BlockHidden;
 import mods.railcraft.common.blocks.hidden.TrailTicker;
 import mods.railcraft.common.core.RailcraftConfig;
@@ -34,7 +35,7 @@ import mods.railcraft.common.util.misc.MiscTools;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class ItemGoggles extends ItemArmor {
+public class ItemGoggles extends ItemArmor implements IToolGoggles {
 
     private static final String TEXTURE = RailcraftConstants.ARMOR_TEXTURE_FOLDER + "goggles.png";
     private static ItemGoggles item;
@@ -83,7 +84,8 @@ public class ItemGoggles extends ItemArmor {
         return new ItemStack(item);
     }
 
-    public static GoggleAura getCurrentAura(ItemStack goggles) {
+    @Override
+    public GoggleAura getCurrentAura(ItemStack goggles) {
         GoggleAura aura = GoggleAura.NONE;
         if (goggles != null && goggles.getItem() instanceof ItemGoggles) {
             NBTTagCompound data = goggles.getTagCompound();
@@ -92,7 +94,7 @@ public class ItemGoggles extends ItemArmor {
         return aura;
     }
 
-    public static void incrementAura(ItemStack goggles) {
+    public void incrementAura(ItemStack goggles) {
         if (goggles != null && goggles.getItem() instanceof ItemGoggles) {
             NBTTagCompound data = goggles.getTagCompound();
             if (data == null) {
@@ -111,13 +113,6 @@ public class ItemGoggles extends ItemArmor {
 
     public static boolean areEnabled() {
         return item != null;
-    }
-
-    public static ItemStack getGoggles(EntityPlayer player) {
-        if (player == null) return null;
-        ItemStack helm = player.getCurrentArmor(MiscTools.ArmorSlots.HELM.ordinal());
-        if (helm != null && helm.getItem() instanceof ItemGoggles) return helm;
-        return null;
     }
 
     public static boolean isPlayerWearing(EntityPlayer player) {
