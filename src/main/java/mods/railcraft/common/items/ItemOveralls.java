@@ -13,7 +13,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
-
+import mods.railcraft.api.core.items.ISafetyPants;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
@@ -24,7 +24,7 @@ import mods.railcraft.common.util.misc.MiscTools;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class ItemOveralls extends ItemArmor {
+public class ItemOveralls extends ItemArmor implements ISafetyPants {
 
     private static final ItemStack BLUE_CLOTH = new ItemStack(Blocks.wool, 1, 3);
     private static final String TEXTURE = RailcraftConstants.ARMOR_TEXTURE_FOLDER + "overalls.png";
@@ -37,6 +37,28 @@ public class ItemOveralls extends ItemArmor {
     public ItemOveralls() {
         super(ItemMaterials.OVERALLS, 0, 2);
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
+    }
+
+    @Override
+    public boolean blocksElectricTrackDamage(ItemStack pants) {
+        return true;
+    }
+
+    @Override
+	public void onShock(ItemStack pants, EntityPlayer player) {
+        player.setCurrentItemOrArmor(
+            MiscTools.ArmorSlots.LEGS.ordinal() + 1,
+            InvTools.damageItem(pants, 1));
+	}
+
+    @Override
+    public boolean lowersLocomotiveDamage(ItemStack pants) {
+        return true;
+    }
+
+    @Override
+    public void onHitLocomotive(ItemStack pants, EntityPlayer player) {
+        player.setCurrentItemOrArmor(MiscTools.ArmorSlots.LEGS.ordinal() + 1, InvTools.damageItem(pants, 5));
     }
 
     @Override
