@@ -4,6 +4,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
 public interface ISafetyPants {
+
     // Test if particular pants should block damage right now
     public boolean blocksElectricTrackDamage(ItemStack pants);
 

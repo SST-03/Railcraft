@@ -13,6 +13,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
+
 import mods.railcraft.api.core.items.ISafetyPants;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.tooltips.ToolTip;
@@ -45,11 +46,9 @@ public class ItemOveralls extends ItemArmor implements ISafetyPants {
     }
 
     @Override
-	public void onShock(ItemStack pants, EntityPlayer player) {
-        player.setCurrentItemOrArmor(
-            MiscTools.ArmorSlots.LEGS.ordinal() + 1,
-            InvTools.damageItem(pants, 1));
-	}
+    public void onShock(ItemStack pants, EntityPlayer player) {
+        player.setCurrentItemOrArmor(MiscTools.ArmorSlots.LEGS.ordinal() + 1, InvTools.damageItem(pants, 1));
+    }
 
     @Override
     public boolean lowersLocomotiveDamage(ItemStack pants) {

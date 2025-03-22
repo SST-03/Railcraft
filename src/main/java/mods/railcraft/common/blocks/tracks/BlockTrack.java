@@ -230,18 +230,18 @@ public class BlockTrack extends BlockRailBase implements IPostConnection {
         if (!(track instanceof IElectricGrid)) return;
 
         IElectricGrid.ChargeHandler chargeHandler = ((IElectricGrid) track).getChargeHandler();
-        if (chargeHandler.getCharge() > 2000)
-            if (entity instanceof EntityPlayer) {
-                EntityPlayer player = ((EntityPlayer) entity);
-                ItemStack pants = player.getCurrentArmor(MiscTools.ArmorSlots.LEGS.ordinal());
-                if (pants != null && pants.getItem() instanceof ISafetyPants && ((ISafetyPants) pants.getItem()).blocksElectricTrackDamage(pants)) {
-                    if (!player.capabilities.isCreativeMode && MiscTools.RANDOM.nextInt(150) == 0) {
-                        ((ISafetyPants) pants.getItem()).onShock(pants, player);
-                    }
-                } else if (player.attackEntityFrom(RailcraftDamageSource.TRACK_ELECTRIC, 2))
-                    chargeHandler.removeCharge(2000);
-            } else if (((EntityLivingBase) entity).attackEntityFrom(RailcraftDamageSource.TRACK_ELECTRIC, 2))
-                chargeHandler.removeCharge(2000);
+        if (chargeHandler.getCharge() > 2000) if (entity instanceof EntityPlayer) {
+            EntityPlayer player = ((EntityPlayer) entity);
+            ItemStack pants = player.getCurrentArmor(MiscTools.ArmorSlots.LEGS.ordinal());
+            if (pants != null && pants.getItem() instanceof ISafetyPants
+                    && ((ISafetyPants) pants.getItem()).blocksElectricTrackDamage(pants)) {
+                if (!player.capabilities.isCreativeMode && MiscTools.RANDOM.nextInt(150) == 0) {
+                    ((ISafetyPants) pants.getItem()).onShock(pants, player);
+                }
+            } else
+                if (player.attackEntityFrom(RailcraftDamageSource.TRACK_ELECTRIC, 2)) chargeHandler.removeCharge(2000);
+        } else if (((EntityLivingBase) entity).attackEntityFrom(RailcraftDamageSource.TRACK_ELECTRIC, 2))
+            chargeHandler.removeCharge(2000);
     }
 
     @Override
