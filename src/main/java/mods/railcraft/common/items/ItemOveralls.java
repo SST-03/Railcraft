@@ -14,6 +14,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 
+import cpw.mods.fml.common.Optional;
 import gregtech.api.hazards.Hazard;
 import gregtech.api.hazards.IHazardProtector;
 import mods.railcraft.api.core.items.ISafetyPants;
@@ -27,6 +28,8 @@ import mods.railcraft.common.util.misc.MiscTools;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
+@Optional.InterfaceList(
+        value = { @Optional.Interface(iface = "gregtech.api.hazards.IHazardProtector", modid = "gregtech"), })
 public class ItemOveralls extends ItemArmor implements ISafetyPants, IHazardProtector {
 
     private static final ItemStack BLUE_CLOTH = new ItemStack(Blocks.wool, 1, 3);
