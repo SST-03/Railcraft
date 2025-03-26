@@ -7,8 +7,6 @@ package mods.railcraft.common.items;
 
 import java.util.List;
 
-import gregtech.api.hazards.Hazard;
-import gregtech.api.hazards.IHazardProtector;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -16,6 +14,8 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 
+import gregtech.api.hazards.Hazard;
+import gregtech.api.hazards.IHazardProtector;
 import mods.railcraft.api.core.items.ISafetyPants;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.tooltips.ToolTip;
@@ -84,8 +84,8 @@ public class ItemOveralls extends ItemArmor implements ISafetyPants, IHazardProt
         if (tip != null) info.addAll(tip.convertToStrings());
     }
 
-	@Override
-	public boolean protectsAgainst(ItemStack itemStack, Hazard hazard) {
-		return hazard == Hazard.ELECTRICAL;
-	}
+    @Override
+    public boolean protectsAgainst(ItemStack itemStack, Hazard hazard) {
+        return hazard == Hazard.ELECTRICAL;
+    }
 }

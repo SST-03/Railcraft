@@ -41,8 +41,8 @@ import org.apache.logging.log4j.Level;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import gregtech.api.hazards.HazardProtection;
 import gregtech.api.hazards.Hazard;
+import gregtech.api.hazards.HazardProtection;
 import mods.railcraft.api.core.IPostConnection;
 import mods.railcraft.api.core.ITextureLoader;
 import mods.railcraft.api.core.items.ISafetyPants;
@@ -267,8 +267,7 @@ public class BlockTrack extends BlockRailBase implements IPostConnection {
     }
 
     static void try_zap(EntityLivingBase entity, ChargeHandler chargeHandler) {
-        if (entity.attackEntityFrom(RailcraftDamageSource.TRACK_ELECTRIC, 2))
-            chargeHandler.removeCharge(2000);
+        if (entity.attackEntityFrom(RailcraftDamageSource.TRACK_ELECTRIC, 2)) chargeHandler.removeCharge(2000);
     }
 
     @Override
