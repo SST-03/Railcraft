@@ -7,6 +7,8 @@ package mods.railcraft.common.items;
 
 import java.util.List;
 
+import gregtech.api.hazards.Hazard;
+import gregtech.api.hazards.IHazardProtector;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -25,7 +27,7 @@ import mods.railcraft.common.util.misc.MiscTools;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class ItemOveralls extends ItemArmor implements ISafetyPants {
+public class ItemOveralls extends ItemArmor implements ISafetyPants, IHazardProtector {
 
     private static final ItemStack BLUE_CLOTH = new ItemStack(Blocks.wool, 1, 3);
     private static final String TEXTURE = RailcraftConstants.ARMOR_TEXTURE_FOLDER + "overalls.png";
@@ -81,4 +83,9 @@ public class ItemOveralls extends ItemArmor implements ISafetyPants {
         ToolTip tip = ToolTip.buildToolTip(stack.getUnlocalizedName() + ".tip");
         if (tip != null) info.addAll(tip.convertToStrings());
     }
+
+	@Override
+	public boolean protectsAgainst(ItemStack itemStack, Hazard hazard) {
+		return hazard == Hazard.ELECTRICAL;
+	}
 }

@@ -14,8 +14,6 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 
-import cpw.mods.fml.common.Loader;
-import gregtech.api.GregTechAPI;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.HarvestPlugin;
@@ -62,9 +60,6 @@ public class RailcraftToolItems {
                 item = itemOveralls = new ItemOveralls();
                 item.setUnlocalizedName(tag);
                 RailcraftRegistry.register(item);
-                if (Loader.isModLoaded("gregtech")) {
-                    GregTechAPI.sElectroHazmatList.add(getOveralls());
-                }
 
                 CraftingPlugin.addShapedRecipe(
                         new ItemStack(item),

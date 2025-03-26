@@ -41,8 +41,8 @@ import org.apache.logging.log4j.Level;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import gregtech.api.GregTechAPI;
-import gregtech.api.util.GTUtility;
+import gregtech.api.hazards.HazardProtection;
+import gregtech.api.hazards.Hazard;
 import mods.railcraft.api.core.IPostConnection;
 import mods.railcraft.api.core.ITextureLoader;
 import mods.railcraft.api.core.items.ISafetyPants;
@@ -239,16 +239,18 @@ public class BlockTrack extends BlockRailBase implements IPostConnection {
             if (entity instanceof EntityPlayer) {
                 EntityPlayer player = ((EntityPlayer) entity);
                 ItemStack pants = player.getCurrentArmor(MiscTools.ArmorSlots.LEGS.ordinal());
-                if (pants == null) {
-                    try_zap((EntityLivingBase) entity, chargeHandler);
+                if (pants == null || pants.getItem() == null) {
+                    try_zap(player, chargeHandler);
                     return;
                 }
                 if (ModuleManager.isModuleLoaded(Module.GREGTECH)) {
-                    if (GTUtility.isStackInList(pants, GregTechAPI.sElectroHazmatList)
-                            || GTUtility.hasHazmatEnchant(pants)) {
+                    // The current GT Hazard API has no concept of "damage on use", so we'll exclude that here.
+                    // Can be updated if it's more important to have the pants damaged than behaving like a GT hazard.
+                    if (HazardProtection.protectsAgainstHazard(pants, Hazard.ELECTRICAL)) {
                         return;
                     }
                 } else {
+                    // should we move up to modern type pattern syntax here for a newer Java version?
                     if (pants.getItem() instanceof ISafetyPants
                             && ((ISafetyPants) pants.getItem()).blocksElectricTrackDamage(pants)) {
                         if (!player.capabilities.isCreativeMode && MiscTools.RANDOM.nextInt(150) == 0) {
@@ -265,7 +267,7 @@ public class BlockTrack extends BlockRailBase implements IPostConnection {
     }
 
     static void try_zap(EntityLivingBase entity, ChargeHandler chargeHandler) {
-        if (((EntityLivingBase) entity).attackEntityFrom(RailcraftDamageSource.TRACK_ELECTRIC, 2))
+        if (entity.attackEntityFrom(RailcraftDamageSource.TRACK_ELECTRIC, 2))
             chargeHandler.removeCharge(2000);
     }
 
