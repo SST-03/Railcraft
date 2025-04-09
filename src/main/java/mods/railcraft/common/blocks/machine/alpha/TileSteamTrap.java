@@ -83,7 +83,7 @@ public abstract class TileSteamTrap extends TileMachineBase implements ISteamUse
                     EntityPlayer player = (EntityPlayer) entity;
                     if (HazardProtection.isWearingFullGasHazmat(player)
                             && HazardProtection.isWearingFullHeatHazmat(player)) {
-                        return;
+                        continue;
                     }
                 }
             }
