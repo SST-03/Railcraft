@@ -10,8 +10,11 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.List;
 
+import cpw.mods.fml.common.Loader;
+import gregtech.api.hazards.HazardProtection;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
@@ -19,7 +22,6 @@ import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
-import net.minecraftforge.fluids.IFluidHandler;
 
 import mods.railcraft.common.blocks.machine.TileMachineBase;
 import mods.railcraft.common.fluids.FluidHelper;
@@ -38,7 +40,7 @@ import mods.railcraft.common.util.steam.ISteamUser;
  *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public abstract class TileSteamTrap extends TileMachineBase implements IFluidHandler, ISteamUser {
+public abstract class TileSteamTrap extends TileMachineBase implements ISteamUser {
 
     private static final byte JET_TIME = 40;
     private static final byte DAMAGE = 8;
@@ -76,6 +78,15 @@ public abstract class TileSteamTrap extends TileMachineBase implements IFluidHan
         }
         triggerCheck();
         if (isJetting()) for (EntityLivingBase entity : getEntitiesInSteamArea()) {
+            if (Loader.isModLoaded("gregtech")) {
+                if (entity instanceof EntityPlayer) {
+                    EntityPlayer player = (EntityPlayer) entity;
+                    if (HazardProtection.isWearingFullGasHazmat(player)
+                            && HazardProtection.isWearingFullHeatHazmat(player)) {
+                        return;
+                    }
+                }
+            }
             entity.attackEntityFrom(RailcraftDamageSource.STEAM, DAMAGE);
         }
     }
