@@ -88,6 +88,7 @@ public class ItemOveralls extends ItemArmor implements ISafetyPants, IHazardProt
     }
 
     @Override
+    @Optional.Method(modid = "gregtech")
     public boolean protectsAgainst(ItemStack itemStack, Hazard hazard) {
         return hazard == Hazard.ELECTRICAL;
     }
