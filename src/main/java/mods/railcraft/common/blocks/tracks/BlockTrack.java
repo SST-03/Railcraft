@@ -239,30 +239,27 @@ public class BlockTrack extends BlockRailBase implements IPostConnection {
             if (entity instanceof EntityPlayer) {
                 EntityPlayer player = ((EntityPlayer) entity);
                 ItemStack pants = player.getCurrentArmor(MiscTools.ArmorSlots.LEGS.ordinal());
-                if (pants == null || pants.getItem() == null) {
-                    try_zap(player, chargeHandler);
-                    return;
-                }
-                if (ModuleManager.isModuleLoaded(Module.GREGTECH)) {
-                    // The current GT Hazard API has no concept of "damage on use", so we'll exclude that here.
-                    // Can be updated if it's more important to have the pants damaged than behaving like a GT hazard.
-                    if (HazardProtection.protectsAgainstHazard(pants, Hazard.ELECTRICAL)) {
-                        return;
-                    }
-                } else {
-                    // should we move up to modern type pattern syntax here for a newer Java version?
-                    if (pants.getItem() instanceof ISafetyPants
-                            && ((ISafetyPants) pants.getItem()).blocksElectricTrackDamage(pants)) {
-                        if (!player.capabilities.isCreativeMode && MiscTools.RANDOM.nextInt(150) == 0) {
-                            ((ISafetyPants) pants.getItem()).onShock(pants, player);
+                if (pants != null && pants.getItem() != null) {
+                    if (ModuleManager.isModuleLoaded(Module.GREGTECH)) {
+                        // The current GT Hazard API has no concept of "damage on use", so we'll exclude that here.
+                        // Can be updated if it's more important to have the pants damaged than behaving like a GT
+                        // hazard.
+                        if (HazardProtection.protectsAgainstHazard(pants, Hazard.ELECTRICAL)) {
+                            return;
                         }
-                        return;
+                    } else {
+                        // should we move up to modern type pattern syntax here for a newer Java version?
+                        if (pants.getItem() instanceof ISafetyPants
+                                && ((ISafetyPants) pants.getItem()).blocksElectricTrackDamage(pants)) {
+                            if (!player.capabilities.isCreativeMode && MiscTools.RANDOM.nextInt(150) == 0) {
+                                ((ISafetyPants) pants.getItem()).onShock(pants, player);
+                            }
+                            return;
+                        }
                     }
                 }
-                try_zap((EntityLivingBase) entity, chargeHandler);
-            } else {
-                try_zap((EntityLivingBase) entity, chargeHandler);
             }
+            try_zap((EntityLivingBase) entity, chargeHandler);
         } ;
     }
 
