@@ -77,17 +77,18 @@ public abstract class TileSteamTrap extends TileMachineBase implements ISteamUse
             return;
         }
         triggerCheck();
-        if (isJetting()) for (EntityLivingBase entity : getEntitiesInSteamArea()) {
-            if (Loader.isModLoaded("gregtech")) {
-                if (entity instanceof EntityPlayer) {
+        if (isJetting()) {
+            boolean gt5Loaded = Loader.isModLoaded("gregtech") && !Loader.isModLoaded("gregapi");
+            for (EntityLivingBase entity : getEntitiesInSteamArea()) {
+                if (gt5Loaded && entity instanceof EntityPlayer) {
                     EntityPlayer player = (EntityPlayer) entity;
                     if (HazardProtection.isWearingFullGasHazmat(player)
                             && HazardProtection.isWearingFullHeatHazmat(player)) {
                         continue;
                     }
                 }
+                entity.attackEntityFrom(RailcraftDamageSource.STEAM, DAMAGE);
             }
-            entity.attackEntityFrom(RailcraftDamageSource.STEAM, DAMAGE);
         }
     }
 
