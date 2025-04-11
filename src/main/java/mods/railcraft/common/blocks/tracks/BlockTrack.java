@@ -236,8 +236,7 @@ public class BlockTrack extends BlockRailBase implements IPostConnection {
 
         IElectricGrid.ChargeHandler chargeHandler = ((IElectricGrid) track).getChargeHandler();
         if (chargeHandler.getCharge() > 2000) {
-            if (entity instanceof EntityPlayer) {
-                EntityPlayer player = ((EntityPlayer) entity);
+            if (entity instanceof EntityPlayer player) {
                 ItemStack pants = player.getCurrentArmor(MiscTools.ArmorSlots.LEGS.ordinal());
                 if (pants != null && pants.getItem() != null) {
                     if (ModuleManager.isModuleLoaded(Module.GREGTECH)) {
@@ -249,10 +248,10 @@ public class BlockTrack extends BlockRailBase implements IPostConnection {
                         }
                     } else {
                         // should we move up to modern type pattern syntax here for a newer Java version?
-                        if (pants.getItem() instanceof ISafetyPants
-                                && ((ISafetyPants) pants.getItem()).blocksElectricTrackDamage(pants)) {
+                        if (pants.getItem() instanceof ISafetyPants safetyPants
+                                && safetyPants.blocksElectricTrackDamage(pants)) {
                             if (!player.capabilities.isCreativeMode && MiscTools.RANDOM.nextInt(150) == 0) {
-                                ((ISafetyPants) pants.getItem()).onShock(pants, player);
+                                safetyPants.onShock(pants, player);
                             }
                             return;
                         }
