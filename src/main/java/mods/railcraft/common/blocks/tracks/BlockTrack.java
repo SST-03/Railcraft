@@ -246,6 +246,10 @@ public class BlockTrack extends BlockRailBase implements IPostConnection {
                         if (HazardProtection.protectsAgainstHazard(pants, Hazard.ELECTRICAL)) {
                             return;
                         }
+                        ItemStack boots = player.getCurrentArmor(MiscTools.ArmorSlots.BOOTS.ordinal());
+                        if (boots != null && HazardProtection.protectsAgainstHazard(boots, Hazard.ELECTRICAL)) {
+                            return;
+                        }
                     } else {
                         // should we move up to modern type pattern syntax here for a newer Java version?
                         if (pants.getItem() instanceof ISafetyPants safetyPants
