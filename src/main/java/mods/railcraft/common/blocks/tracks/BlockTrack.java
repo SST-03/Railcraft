@@ -258,12 +258,12 @@ public class BlockTrack extends BlockRailBase implements IPostConnection {
                     }
                 }
             }
-            try_zap((EntityLivingBase) entity, chargeHandler);
+            tryZap((EntityLivingBase) entity, chargeHandler);
         } ;
     }
 
-    static void try_zap(EntityLivingBase entity, ChargeHandler chargeHandler) {
-        if (entity.attackEntityFrom(RailcraftDamageSource.TRACK_ELECTRIC, 2)) chargeHandler.removeCharge(2000);
+    static void tryZap(EntityLivingBase entityLiving, ChargeHandler chargeHandler) {
+        if (entityLiving.attackEntityFrom(RailcraftDamageSource.TRACK_ELECTRIC, 2)) chargeHandler.removeCharge(2000);
     }
 
     @Override

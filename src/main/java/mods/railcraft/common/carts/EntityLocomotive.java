@@ -463,11 +463,11 @@ public abstract class EntityLocomotive extends CartContainerBase
     }
 
     public int getDamageToRoadKill(EntityLivingBase entity) {
-        if (entity instanceof EntityPlayer) {
-            ItemStack pants = ((EntityPlayer) entity).getCurrentArmor(MiscTools.ArmorSlots.LEGS.ordinal());
-            if (pants != null && pants.getItem() instanceof ISafetyPants safetyPants) {
-                if (safetyPants.lowersLocomotiveDamage(pants)) {
-                    safetyPants.onHitLocomotive(pants, (EntityPlayer) entity);
+        if (entity instanceof EntityPlayer player) {
+            ItemStack legArmor = player.getCurrentArmor(MiscTools.ArmorSlots.LEGS.ordinal());
+            if (legArmor != null && legArmor.getItem() instanceof ISafetyPants safetyPants) {
+                if (safetyPants.lowersLocomotiveDamage(legArmor)) {
+                    safetyPants.onHitLocomotive(legArmor, (EntityPlayer) entity);
                     return 4;
                 }
             }
