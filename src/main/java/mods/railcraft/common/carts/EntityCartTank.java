@@ -33,6 +33,12 @@ import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
 
+import cpw.mods.fml.common.Loader;
+
+import com.indemnity83.irontank.item.ItemTankChanger;
+import com.indemnity83.irontank.reference.TankType;
+import secondderivative.irontankminecarts.minecarts.EntityMinecartTankAbstract;
+
 public class EntityCartTank extends EntityCartFiltered
         implements IFluidHandler, ILiquidTransfer, ISidedInventory, IFluidCart {
 
@@ -165,6 +171,33 @@ public class EntityCartTank extends EntityCartFiltered
 
     @Override
     public boolean doInteract(EntityPlayer player) {
+        // should imply that irontanks is also loaded
+        if (Loader.isModLoaded("irontankminecarts")) {
+            ItemStack stack = player.getCurrentEquippedItem();
+            if (stack != null && stack.getItem() instanceof ItemTankChanger changer) {
+                if (changer.type.canUpgrade(TankType.GLASS)) {
+                    if (Game.isHost(worldObj)) {
+                        TankType newType = changer.type.target;
+                        NBTTagCompound nbt = new NBTTagCompound();
+                        writeToNBT(nbt);
+                        setDead();
+                        try {
+                            EntityMinecartTankAbstract minecart = EntityMinecartTankAbstract.map.get(newType)
+                                .getConstructor(World.class)
+                                .newInstance(worldObj);
+                            minecart.readFromNBT(nbt);
+                            worldObj.spawnEntityInWorld(minecart);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    if (!player.capabilities.isCreativeMode && --stack.stackSize <= 0) {
+                        player.setCurrentItemOrArmor(0, null);
+                    }
+                }
+                return true;
+            }
+        }
         if (Game.isHost(worldObj)) {
             if (FluidHelper.handleRightClick(this, ForgeDirection.UNKNOWN, player, true, true)) return true;
             GuiHandler.openGui(EnumGui.CART_TANK, player, worldObj, this);
