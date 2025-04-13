@@ -19,6 +19,10 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 
+import com.indemnity83.irontank.item.ItemTankChanger;
+import com.indemnity83.irontank.reference.TankType;
+
+import cpw.mods.fml.common.Loader;
 import mods.railcraft.api.carts.IFluidCart;
 import mods.railcraft.api.carts.ILiquidTransfer;
 import mods.railcraft.common.core.RailcraftConfig;
@@ -32,11 +36,6 @@ import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
-
-import cpw.mods.fml.common.Loader;
-
-import com.indemnity83.irontank.item.ItemTankChanger;
-import com.indemnity83.irontank.reference.TankType;
 import secondderivative.irontankminecarts.minecarts.EntityMinecartTankAbstract;
 
 public class EntityCartTank extends EntityCartFiltered
@@ -175,7 +174,7 @@ public class EntityCartTank extends EntityCartFiltered
         if (Loader.isModLoaded("irontankminecarts")) {
             ItemStack stack = player.getCurrentEquippedItem();
             if (stack != null && stack.getItem() instanceof ItemTankChanger changer) {
-                if (changer.type.canUpgrade(TankType.GLASS)) {
+                if (changer.type.canUpgrade(tankType())) {
                     if (Game.isHost(worldObj)) {
                         TankType newType = changer.type.target;
                         NBTTagCompound nbt = new NBTTagCompound();
@@ -183,8 +182,7 @@ public class EntityCartTank extends EntityCartFiltered
                         setDead();
                         try {
                             EntityMinecartTankAbstract minecart = EntityMinecartTankAbstract.map.get(newType)
-                                .getConstructor(World.class)
-                                .newInstance(worldObj);
+                                    .getConstructor(World.class).newInstance(worldObj);
                             minecart.readFromNBT(nbt);
                             worldObj.spawnEntityInWorld(minecart);
                         } catch (Exception e) {
@@ -373,5 +371,10 @@ public class EntityCartTank extends EntityCartFiltered
     @Override
     public boolean canProvidePulledFluid(EntityMinecart requester, Fluid fluid) {
         return canPassFluidRequests(fluid);
+    }
+
+    @Optional.Method(modid = "irontankminecarts")
+    public TankType tankType() {
+        return TankType.GLASS;
     }
 }
