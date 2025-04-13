@@ -12,7 +12,7 @@ dependencies {
         exclude group: 'com.github.GTNewHorizons', module: 'Railcraft'
     }
     compileOnly("com.github.GTNewHorizons:Irontanks:1.4.1:dev");
-    compileOnly("secondderivative.irontankminecarts:IronTankMinecarts:1.0.4:dev") {
+    compileOnly("secondderivative.irontankminecarts:IronTankMinecarts:1.0.5:dev") {
         exclude group: 'com.github.GTNewHorizons', module: 'Railcraft'
     }
     
