@@ -372,9 +372,4 @@ public class EntityCartTank extends EntityCartFiltered
     public boolean canProvidePulledFluid(EntityMinecart requester, Fluid fluid) {
         return canPassFluidRequests(fluid);
     }
-
-    @Optional.Method(modid = "irontankminecarts")
-    public TankType tankType() {
-        return TankType.GLASS;
-    }
 }
