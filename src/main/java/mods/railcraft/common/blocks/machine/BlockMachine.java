@@ -169,7 +169,7 @@ public class BlockMachine extends BlockContainer implements IPostConnection {
     public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z, boolean willHarvest) {
         player.addStat(StatList.mineBlockStatArray[getIdFromBlock(this)], 1);
         player.addExhaustion(0.025F);
-        if (willHarvest) {
+        if (willHarvest && !player.capabilities.isCreativeMode) {
             dropBlockAsItem(world, x, y, z, 0, 0);
         }
         super.removedByPlayer(world, player, x, y, z, willHarvest);
