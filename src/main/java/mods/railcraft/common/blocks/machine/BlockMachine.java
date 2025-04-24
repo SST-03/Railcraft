@@ -167,20 +167,15 @@ public class BlockMachine extends BlockContainer implements IPostConnection {
     }
 
     @Override
-    public void harvestBlock(World world, EntityPlayer entityplayer, int i, int j, int k, int l) {}
-
-    @Override
     public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z, boolean willHarvest) {
         player.addStat(StatList.mineBlockStatArray[getIdFromBlock(this)], 1);
         player.addExhaustion(0.025F);
-        if (Game.isHost(world) && !player.capabilities.isCreativeMode)
-            if (canSilkHarvest(world, player, x, y, z, 0) && EnchantmentHelper.getSilkTouchModifier(player)) {
-                List<ItemStack> drops = getBlockDroppedSilkTouch(world, x, y, z, 0, 0);
-                for (ItemStack stack : drops) {
-                    dropBlockAsItem(world, x, y, z, stack);
-                }
-            } else dropBlockAsItem(world, x, y, z, 0, 0);
-        return world.setBlockToAir(x, y, z);
+        if (willHarvest) {
+            dropBlockAsItem(world, x, y, z, 0, 0);
+        }
+        super.removedByPlayer(world, player, x, y, z, willHarvest);
+        // prevent blockHarvest call
+        return false;
     }
 
     @Override
