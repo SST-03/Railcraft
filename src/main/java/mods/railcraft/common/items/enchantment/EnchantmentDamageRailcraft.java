@@ -16,6 +16,7 @@ public class EnchantmentDamageRailcraft extends EnchantmentCrowbar {
     private final Class<? extends EntityLivingBase> targetType;
     private final float damageBonusPerLevel;
     private WeakReference<Entity> target;
+    public EventHandler handler;
 
     public EnchantmentDamageRailcraft(String tag, int id, int weight, int baseEnchantability, int levelEnchantability,
             int thresholdEnchantability, Class<? extends EntityLivingBase> targetType, float damageBonusPerLevel) {
@@ -25,6 +26,7 @@ public class EnchantmentDamageRailcraft extends EnchantmentCrowbar {
         this.thresholdEnchantability = thresholdEnchantability;
         this.targetType = targetType;
         this.damageBonusPerLevel = damageBonusPerLevel;
+        this.handler = new EventHandler();
     }
 
     @Override
@@ -51,13 +53,15 @@ public class EnchantmentDamageRailcraft extends EnchantmentCrowbar {
         return modifier;
     }
 
-    @SubscribeEvent
-    public void attackEvent(AttackEntityEvent event) {
-        target = new WeakReference<Entity>(event.target);
-    }
-
     @Override
     public boolean canApplyTogether(Enchantment enchantment) {
         return !(enchantment instanceof EnchantmentDamageRailcraft);
+    }
+
+    public class EventHandler{
+        @SubscribeEvent
+        public void attackEvent(AttackEntityEvent event) {
+            target = new WeakReference<Entity>(event.target);
+        }
     }
 }
