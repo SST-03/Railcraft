@@ -58,7 +58,8 @@ public class EnchantmentDamageRailcraft extends EnchantmentCrowbar {
         return !(enchantment instanceof EnchantmentDamageRailcraft);
     }
 
-    public class EventHandler{
+    public class EventHandler {
+
         @SubscribeEvent
         public void attackEvent(AttackEntityEvent event) {
             target = new WeakReference<Entity>(event.target);

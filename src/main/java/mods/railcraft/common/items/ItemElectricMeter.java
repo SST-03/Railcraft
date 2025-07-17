@@ -100,7 +100,8 @@ public class ItemElectricMeter extends ItemRailcraft implements IActivationBlock
         return returnValue;
     }
 
-    public class EventHandler{
+    public class EventHandler {
+
         @SubscribeEvent
         public void onEntityInteract(EntityInteractEvent event) {
             EntityPlayer player = event.entityPlayer;
@@ -118,11 +119,11 @@ public class ItemElectricMeter extends ItemRailcraft implements IActivationBlock
                     IElectricMinecart.ChargeHandler ch = cart.getChargeHandler();
                     if (ch != null) {
                         ChatPlugin.sendLocalizedChat(
-                            player,
-                            "railcraft.gui.electric.meter.charge",
-                            ch.getCharge(),
-                            ch.getDraw(),
-                            ch.getLosses());
+                                player,
+                                "railcraft.gui.electric.meter.charge",
+                                ch.getCharge(),
+                                ch.getDraw(),
+                                ch.getLosses());
                         event.setCanceled(true);
                     }
                 }

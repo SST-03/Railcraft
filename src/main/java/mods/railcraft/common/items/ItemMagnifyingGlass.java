@@ -120,7 +120,8 @@ public class ItemMagnifyingGlass extends ItemRailcraft implements IActivationBlo
         return returnValue;
     }
 
-    public class EventHandler{
+    public class EventHandler {
+
         @SubscribeEvent
         public void onEntityInteract(EntityInteractEvent event) {
             EntityPlayer thePlayer = event.entityPlayer;
@@ -135,10 +136,10 @@ public class ItemMagnifyingGlass extends ItemRailcraft implements IActivationBlo
             if (stack != null && stack.getItem() instanceof ItemMagnifyingGlass) if (entity instanceof EntityMinecart) {
                 EntityMinecart cart = (EntityMinecart) entity;
                 ChatPlugin.sendLocalizedChatFromServer(
-                    thePlayer,
-                    "railcraft.gui.mag.glass.placedby",
-                    LocalizationPlugin.getEntityLocalizationTag(cart),
-                    CartTools.getCartOwner(cart));
+                        thePlayer,
+                        "railcraft.gui.mag.glass.placedby",
+                        LocalizationPlugin.getEntityLocalizationTag(cart),
+                        CartTools.getCartOwner(cart));
                 event.setCanceled(true);
             }
         }
