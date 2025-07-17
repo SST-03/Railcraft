@@ -48,7 +48,7 @@ public class ItemMagnifyingGlass extends ItemRailcraft implements IActivationBlo
         setUnlocalizedName("railcraft.tool.magnifying.glass");
         setFull3D();
 
-        MinecraftForge.EVENT_BUS.register(this);
+        MinecraftForge.EVENT_BUS.register(new EventHandler());
 
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
     }
@@ -71,28 +71,6 @@ public class ItemMagnifyingGlass extends ItemRailcraft implements IActivationBlo
     public static ItemStack getItem() {
         if (item == null) return null;
         return new ItemStack(item);
-    }
-
-    @SubscribeEvent
-    public void onEntityInteract(EntityInteractEvent event) {
-        EntityPlayer thePlayer = event.entityPlayer;
-
-        Entity entity = event.target;
-
-        ItemStack stack = thePlayer.getCurrentEquippedItem();
-        if (stack != null && stack.getItem() instanceof ItemMagnifyingGlass) thePlayer.swingItem();
-
-        if (Game.isNotHost(thePlayer.worldObj)) return;
-
-        if (stack != null && stack.getItem() instanceof ItemMagnifyingGlass) if (entity instanceof EntityMinecart) {
-            EntityMinecart cart = (EntityMinecart) entity;
-            ChatPlugin.sendLocalizedChatFromServer(
-                    thePlayer,
-                    "railcraft.gui.mag.glass.placedby",
-                    LocalizationPlugin.getEntityLocalizationTag(cart),
-                    CartTools.getCartOwner(cart));
-            event.setCanceled(true);
-        }
     }
 
     @Override
@@ -140,5 +118,30 @@ public class ItemMagnifyingGlass extends ItemRailcraft implements IActivationBlo
             returnValue = true;
         }
         return returnValue;
+    }
+
+    public class EventHandler {
+
+        @SubscribeEvent
+        public void onEntityInteract(EntityInteractEvent event) {
+            EntityPlayer thePlayer = event.entityPlayer;
+
+            Entity entity = event.target;
+
+            ItemStack stack = thePlayer.getCurrentEquippedItem();
+            if (stack != null && stack.getItem() instanceof ItemMagnifyingGlass) thePlayer.swingItem();
+
+            if (Game.isNotHost(thePlayer.worldObj)) return;
+
+            if (stack != null && stack.getItem() instanceof ItemMagnifyingGlass) if (entity instanceof EntityMinecart) {
+                EntityMinecart cart = (EntityMinecart) entity;
+                ChatPlugin.sendLocalizedChatFromServer(
+                        thePlayer,
+                        "railcraft.gui.mag.glass.placedby",
+                        LocalizationPlugin.getEntityLocalizationTag(cart),
+                        CartTools.getCartOwner(cart));
+                event.setCanceled(true);
+            }
+        }
     }
 }

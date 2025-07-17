@@ -23,7 +23,7 @@ public class RailcraftEnchantments {
                 20,
                 EntityCreeper.class,
                 3f);
-        MinecraftForge.EVENT_BUS.register(implosion);
+        MinecraftForge.EVENT_BUS.register(((EnchantmentDamageRailcraft) implosion).handler);
         destruction = new EnchantmentDestruction(RailcraftConfig.destructionID(), 1);
     }
 }
