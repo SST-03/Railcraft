@@ -337,7 +337,7 @@ public class TileAnchorWorld extends TileMachineItem implements IAnchor, ISidedI
 
     protected void releaseTicket() {
         refreshTicket = false;
-        logTicketReleased(getTicket().world);
+        logTicketReleased();
         setTicket(null);
     }
 
@@ -394,7 +394,7 @@ public class TileAnchorWorld extends TileMachineItem implements IAnchor, ISidedI
                             ForgeChunkManager.unforceChunk(ticket, chunk);
                     }
                     ForgeChunkManager.releaseTicket(ticket);
-                    logTicketReleased(worldObj);
+                    logTicketReleased();
                 }
                 tickets.remove(getUUID());
             }
@@ -531,17 +531,7 @@ public class TileAnchorWorld extends TileMachineItem implements IAnchor, ISidedI
         return false;
     }
 
-    private void logTicketReleased(World worldObj) {
-        if (worldObj == null) {
-            Game.log(
-                    Level.ERROR,
-                    "{0} has Released ticket and is ticking at <x{1} y{2} z{3}> in dim:?? - logged on tick ?? (CANNOT SEND TO CHAT!!)",
-                    getName(),
-                    xCoord,
-                    yCoord,
-                    zCoord);
-            return;
-        }
+    private void logTicketReleased() {
         ChatPlugin.sendLocalizedChatToAllFromServer(
                 worldObj,
                 "%s has Released ticket at <x%d y%d z%d> in dim:%d - logged on tick %d",
