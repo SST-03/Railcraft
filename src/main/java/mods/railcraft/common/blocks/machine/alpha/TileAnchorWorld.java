@@ -364,7 +364,7 @@ public class TileAnchorWorld extends TileMachineItem implements IAnchor, ISidedI
     }
 
     protected Ticket getTicketFromForge() {
-        return ForgeChunkManager.requestTicket(Railcraft.getMod(), worldObj, Type.NORMAL);
+        return ForgeChunkManager.requestPlayerTicket(Railcraft.getMod(), "", worldObj, Type.NORMAL);
     }
 
     protected void setTicketData(Ticket chunkTicket) {
