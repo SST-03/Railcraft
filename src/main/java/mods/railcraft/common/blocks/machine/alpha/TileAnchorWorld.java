@@ -337,6 +337,7 @@ public class TileAnchorWorld extends TileMachineItem implements IAnchor, ISidedI
 
     protected void releaseTicket() {
         refreshTicket = false;
+        logTicketReleased(getTicket().world);
         setTicket(null);
     }
 
@@ -393,6 +394,7 @@ public class TileAnchorWorld extends TileMachineItem implements IAnchor, ISidedI
                             ForgeChunkManager.unforceChunk(ticket, chunk);
                     }
                     ForgeChunkManager.releaseTicket(ticket);
+                    logTicketReleased(worldObj);
                 }
                 tickets.remove(getUUID());
             }
@@ -527,5 +529,17 @@ public class TileAnchorWorld extends TileMachineItem implements IAnchor, ISidedI
     @Override
     public boolean canExtractItem(int i, ItemStack itemstack, int j) {
         return false;
+    }
+
+    private void logTicketReleased(World worldObj) {
+        ChatPlugin.sendLocalizedChatToAllFromServer(
+                worldObj,
+                "%s has Released ticket at <x%d y%d z%d> in dim:%d - logged on tick %d",
+                getName(),
+                xCoord,
+                yCoord,
+                zCoord,
+                worldObj.provider.dimensionId,
+                worldObj.getWorldTime());
     }
 }
